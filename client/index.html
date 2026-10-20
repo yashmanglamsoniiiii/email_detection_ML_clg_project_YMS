@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Email & SMS Spam Detector // 3D Neural Inspector</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Three.js WebGL Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-group">
+      <div class="logo-icon">??</div>
+      <div class="logo-text">
+        <h1>SPAM<span>SENTINEL</span> // AI</h1>
+        <p>Real-Time Neural Email & SMS Threat Analysis</p>
+      </div>
+    </div>
+
+    <div class="status-badges">
+      <div class="badge pulse">ONLINE</div>
+      <div class="badge" id="header-accuracy-badge">96.7% Accuracy (LR)</div>
+      <div class="badge">15,425 Samples</div>
+      <div class="badge">Pure Node.js Runtime</div>
+      <button class="btn-secondary" id="open-modal-btn">?? Architecture & Viva</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    
+    <!-- Left Column: 3D Holographic Chamber -->
+    <section class="chamber-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span>?</span> 3D Holographic Security Scanner
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);">
+          Drag to Rotate 3D Model
+        </div>
+      </div>
+
+      <div class="chamber-canvas-wrapper" id="threejs-canvas-wrapper">
+        <div class="chamber-hud">
+          <div class="hud-box">FREQ: <span>2.4 GHz</span></div>
+          <div class="hud-box">TF-IDF: <span>8,000 N-Grams</span></div>
+        </div>
+
+        <div class="chamber-bottom-hud">
+          <div class="state-badge" id="hud-state-badge">SCANNER IDLE // READY</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Security Analysis Console -->
+    <section class="console-panel">
+      
+      <!-- One-Click Preset Samples -->
+      <div class="presets-section">
+        <div class="section-label">
+          <span>One-Click Test Presets</span>
+          <span>Click to Auto-Load & Analyze</span>
+        </div>
+        <div class="preset-chips" id="preset-chips">
+          <!-- Populated dynamically via /api/samples -->
+          <button class="chip spam-chip">Loading samples...</button>
+        </div>
+      </div>
+
+      <!-- Text Input Area -->
+      <div class="input-group">
+        <div class="section-label" style="margin-bottom: 6px;">
+          <span>Message / Email Content</span>
+          <button class="clear-btn" id="clear-btn">Clear All</button>
+        </div>
+        <textarea 
+          id="email-input" 
+          placeholder="Paste any suspicious or legitimate email body, SMS text, or header here to analyze...&#10;&#10;e.g. 'URGENT: Click here to claim your $1,000,000 lottery winnings...' or 'Hi team, let's meet tomorrow at 3pm to review the quarterly budget.'"
+        ></textarea>
+        <div class="input-footer">
+          <span id="char-count">0 words | 0 chars</span>
+          <span style="opacity: 0.7;">Supports unigrams & bigrams</span>
+        </div>
+      </div>
+
+      <!-- Primary Scan Button -->
+      <button class="cta-btn" id="analyze-btn">
+        <span>SCAN & VERIFY MESSAGE</span>
+      </button>
+
+      <!-- Analysis Results Card -->
+      <div class="result-card" id="result-card" style="display: none;">
+        <div class="result-main">
+          <div class="verdict-title ham" id="verdict-title">
+            <span>??? SAFE / LEGITIMATE MESSAGE (HAM)</span>
+          </div>
+          <div class="confidence-gauge">
+            <div class="confidence-num" id="confidence-num">98.5%</div>
+            <div class="confidence-lbl" id="latency-badge">Confidence Score</div>
+          </div>
+        </div>
+
+        <!-- Probability Bar -->
+        <div class="prob-bar-container">
+          <div class="prob-labels">
+            <span id="prob-ham-pct">Ham: 98.5%</span>
+            <span id="prob-spam-pct">Spam: 1.5%</span>
+          </div>
+          <div class="prob-bar-track">
+            <div class="prob-bar-fill ham" id="prob-bar-fill" style="width: 98.5%;"></div>
+          </div>
+        </div>
+
+        <!-- Influential Words Breakdown -->
+        <div class="keywords-section">
+          <div class="section-label">
+            <span>Influential Feature Tokens (Explainability / X-Ray)</span>
+            <span>+ Spam Signal / - Ham Signal</span>
+          </div>
+          <div class="keyword-chips-container" id="keyword-chips-container">
+            <!-- Dynamically populated keyword pills -->
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Model Architecture & Viva Notes Modal -->
+  <div class="modal-overlay" id="model-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Neural Model Architecture & Defense Dossier</h2>
+        <button class="close-btn" id="close-modal-btn">&times;</button>
+      </div>
+
+      <div class="modal-grid">
+        <div class="stat-tile">
+          <h3>Total Training Dataset</h3>
+          <div class="big-val" id="stat-total-samples">15,425</div>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">SpamAssassin (6k) + Enron (5.1k) + SMS (5.5k)</p>
+        </div>
+        <div class="stat-tile">
+          <h3>Test Accuracy</h3>
+          <div class="big-val" id="stat-accuracy" style="color: var(--neon-cyan);">96.66%</div>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Evaluated on 3,085 holdout messages</p>
+        </div>
+        <div class="stat-tile">
+          <h3>Spam Precision</h3>
+          <div class="big-val" id="stat-precision" style="color: var(--neon-green);">97.13%</div>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Ultra-low false positives (only 18 / 2,391)</p>
+        </div>
+        <div class="stat-tile">
+          <h3>F1-Score</h3>
+          <div class="big-val" id="stat-f1" style="color: var(--neon-amber);">92.20%</div>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Harmonic mean of precision and recall</p>
+        </div>
+      </div>
+
+      <!-- Top Signals -->
+      <div>
+        <h4 style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--neon-red); margin-bottom: 8px;">
+          Top Influential Spam Triggers (+ Weight)
+        </h4>
+        <div class="keyword-chips-container" id="modal-top-spam"></div>
+      </div>
+
+      <div>
+        <h4 style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--neon-green); margin-bottom: 8px;">
+          Top Influential Ham Triggers (- Weight)
+        </h4>
+        <div class="keyword-chips-container" id="modal-top-ham"></div>
+      </div>
+
+      <!-- Viva Notes -->
+      <div style="background: rgba(7, 10, 19, 0.6); padding: 16px; border-radius: 8px; border: 1px solid rgba(0, 240, 255, 0.15);">
+        <h4 style="font-family: var(--font-mono); color: var(--neon-cyan); margin-bottom: 8px;">
+          Viva / Portfolio Questions & Answers
+        </h4>
+        <ul style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; padding-left: 20px;">
+          <li><strong style="color: #fff;">Q: Why Sublinear TF-IDF?</strong> Normal term frequency favors long corporate emails. Sublinear scaling (1 + ln(count)) normalizes term frequencies so long emails and short SMS texts are judged fairly.</li>
+          <li><strong style="color: #fff;">Q: How does Zero-Python serving work?</strong> Scikit-learn exported the vocabulary, IDF table, and model weights to JSON. Node.js evaluates vectorization and sigmoid inference natively in pure JavaScript in &lt; 1 millisecond.</li>
+          <li><strong style="color: #fff;">Q: How is word explainability computed?</strong> Each word's contribution is calculated as (Normalized TF-IDF &times; Model Coefficient). Positive values push toward SPAM, negative toward HAM.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>Email & SMS Spam Threat Detection Engine &copy; 2026</div>
+    <div>Built with <span style="color: var(--neon-cyan);">Node.js</span> &bull; <span style="color: var(--neon-green);">Three.js</span> &bull; <span style="color: var(--neon-amber);">scikit-learn</span></div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/scene3d.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

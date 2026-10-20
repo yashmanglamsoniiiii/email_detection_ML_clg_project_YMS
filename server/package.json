@@ -1,0 +1,1 @@
+{"name":"email-spam-detection-server","version":"1.0.0","description":"Production Node.js Express inference server for Email and SMS Spam Detection","main":"src/app.js","type":"commonjs","scripts":{"start":"node src/app.js","dev":"node --watch src/app.js"},"dependencies":{"cors":"^2.8.5","dotenv":"^16.4.5","express":"^4.21.0","morgan":"^1.10.0"}}
